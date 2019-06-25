@@ -131,15 +131,21 @@ describe.only("formatComments", () => {
       }
     ];
     const actual = formatComments(comment);
-    const expected = [
+    expect(actual[0].author).to.equal("butter_bridge");
+  });
+  it('its "belongs_to" property is renamed to an "article_id" key ', () => {
+    const comment = [
       {
         body: "This morning, I showered for nine minutes.",
         belongs_to: "Living in the shadow of a great man",
-        author: "butter_bridge",
+        created_by: "butter_bridge",
         votes: 16,
         created_at: 975242163389
       }
     ];
-    expect(actual).to.eql(expected);
+    const actual = formatComments(comment);
+    expect(actual[0].article_id).to.equal(
+      "Living in the shadow of a great man"
+    );
   });
 });
