@@ -1,11 +1,12 @@
 //formatted date below so that it will return a non millisecond date/time
 exports.formatDate = list => {
-  let formattedDateArr = list.map(ele => {
-    let date = new Date(ele.created_at);
-    ele.created_at = date;
-    return ele;
+  const formattedDateArr = list.map(ele => {
+    const newObj = { ...ele };
+    let date = new Date(newObj.created_at);
+    newObj.created_at = date;
+
+    return newObj;
   });
-  console.log(formattedDateArr);
   return formattedDateArr;
 };
 
@@ -18,4 +19,12 @@ exports.makeRefObj = list => {
 };
 
 //
-exports.formatComments = (comments, articleRef) => {}; //call function inside function
+exports.formatComments = (comments, articleRef) => {
+  const formattedCommentsArr = comments.map(ele => {
+    const newObj = { ...ele, created_by: articleRef[ele.author] };
+    console.log(newObj);
+    return newObj;
+  });
+
+  return formattedCommentsArr;
+}; //call function inside function

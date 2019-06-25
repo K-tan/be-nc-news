@@ -8,4 +8,4 @@ const data = {
   test: testData
 };
 
-module.exports - data[ENV];
+module.exports = data[ENV];
