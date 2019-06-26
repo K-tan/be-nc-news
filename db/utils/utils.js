@@ -28,6 +28,5 @@ exports.formatComments = (comments, articleRef) => {
     delete newObj["belongs_to"];
     let date = new Date(newObj.created_at);
     newObj.created_at = date;
-    return newObj;
   }));
 }; //call function inside function
