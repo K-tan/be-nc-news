@@ -93,59 +93,34 @@ describe("makeRefObj", () => {
 
 describe.only("formatComments", () => {
   it("returns a new empty array", () => {
-    const data = [];
-    const actual = formatComments(data);
+    const comment = [];
+    const actual = formatComments(comment);
     const expected = [];
     expect(actual).to.eql(expected);
   });
-  it("returns a new array with a new reference object", () => {
+  it("renames keys on a single comment object", () => {
     const comment = [
       {
-        body: "This morning, I showered for nine minutes.",
-        belongs_to: "Living in the shadow of a great man",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 975242163389
+        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
+        belongs_to: "Making sense of Redux",
+        created_by: "grumpy19",
+        votes: 7,
+        created_at: 1478813209256
       }
     ];
-    const actual = formatComments(comment);
     const expected = [
       {
-        body: "This morning, I showered for nine minutes.",
-        belongs_to: "Living in the shadow of a great man",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 975242163389
+        article_id: 4,
+        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
+        author: "grumpy19",
+        votes: 7,
+        created_at: 1478813209256,
+        article_id: 4
       }
     ];
-    expect(actual).not.to.equal(expected);
-  });
-  it('its "created_by" property is renamed to an "author" key ', () => {
-    const comment = [
-      {
-        body: "This morning, I showered for nine minutes.",
-        belongs_to: "Living in the shadow of a great man",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 975242163389
-      }
-    ];
-    const actual = formatComments(comment);
-    expect(actual[0].author).to.equal("butter_bridge");
-  });
-  it('its "belongs_to" property is renamed to an "article_id" key ', () => {
-    const comment = [
-      {
-        body: "This morning, I showered for nine minutes.",
-        belongs_to: "Living in the shadow of a great man",
-        created_by: "butter_bridge",
-        votes: 16,
-        created_at: 975242163389
-      }
-    ];
-    const actual = formatComments(comment);
-    expect(actual[0].article_id).to.equal(
-      "Living in the shadow of a great man"
-    );
+    const articleRef = { "Making sense of Redux": 4 };
+    const actual = formatComments(comment, articleRef);
+    expect(actual[0].author).to.eql("grumpy19");
+    expect(actual[0].article_id).to.eql(4);
   });
 });
