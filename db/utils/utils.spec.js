@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { formatDate, makeRefObj, formatComments } = require("../db/utils/utils");
+const { formatDate, makeRefObj, formatComments } = require("./utils");
 
 describe("formatDate", () => {
   it("returns a new array of objects", () => {
@@ -91,7 +91,7 @@ describe("makeRefObj", () => {
   });
 });
 
-describe.only("formatComments", () => {
+describe("formatComments", () => {
   it("returns a new empty array", () => {
     const comment = [];
     const actual = formatComments(comment);
