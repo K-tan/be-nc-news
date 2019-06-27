@@ -102,12 +102,33 @@ describe("/", () => {
       });
       it("GET status 404 when invalid article_id has been provided", () => {
         return request
-          .get("/api/articles/10000")
+          .get("/api/articles/notvalid")
           .expect(404)
-          .then(({ body: { msg } }) => {
-            expect(msg).to.equal("page not found");
+          .then(({ body }) => {
+            expect(body.msg).to.equal("Page not found");
           });
       });
+    });
+  });
+  describe("PATCH", () => {
+    it("increases the vote count by the inc_votes passed through and returns the updated article ", () => {
+      const input = { inc_votes: 1 };
+      return request
+        .patch("/api/articles/1")
+        .send(input)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).to.eql({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            body: "I find this existence challenging",
+            votes: 101,
+            topic: "mitch",
+            author: "butter_bridge",
+            created_at: "2018-11-15T12:21:54.171Z",
+            comment_count: "13"
+          });
+        });
     });
   });
 });

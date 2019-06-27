@@ -5,7 +5,8 @@ const {
   handle404Errors,
   handleCodeErrors,
   handle500Errors,
-  handleCustomErrors
+  handleCustomErrors,
+  handle404PSQLerrors
 } = require("./errors");
 //require error handlers in here
 
@@ -15,5 +16,6 @@ app.use("/api", apiRouter);
 app.get("/*", handle404Errors);
 app.use(handleCodeErrors);
 app.use(handleCustomErrors);
+app.use(handle404PSQLerrors);
 app.use(handle500Errors);
 module.exports = app;

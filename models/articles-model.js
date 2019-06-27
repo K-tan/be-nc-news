@@ -9,3 +9,18 @@ exports.fetchArticleById = ({ article_id }) => {
     .where("articles.article_id", article_id)
     .groupBy("articles.article_id");
 };
+
+exports.updateArticle = (article_id, data) => {
+  return knex("articles")
+    .where("article_id", "=", article_id)
+    .update(data)
+    .returning("*")
+    .then(rows => {
+      if (rows.length) return rows;
+      else
+        return Promise.reject({
+          status: 422,
+          msg: "Bad Request: Unprocessable Data"
+        });
+    });
+};
