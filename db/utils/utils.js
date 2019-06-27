@@ -20,7 +20,7 @@ exports.makeRefObj = list => {
 
 //
 exports.formatComments = (comments, articleRef) => {
-  return (formattedCommentsArr = comments.map(ele => {
+  return comments.map(ele => {
     const newObj = { ...ele };
     newObj["author"] = ele["created_by"];
     delete newObj["created_by"];
@@ -28,5 +28,6 @@ exports.formatComments = (comments, articleRef) => {
     delete newObj["belongs_to"];
     let date = new Date(newObj.created_at);
     newObj.created_at = date;
-  }));
+    return newObj;
+  });
 }; //call function inside function

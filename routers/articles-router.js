@@ -4,7 +4,7 @@ const { sendArticleById } = require("../controllers/articles-controller");
 const { handle405Errors } = require("../errors");
 
 articlesRouter
-  .route("/")
+  .route("/:article_id")
   .get(sendArticleById)
   .all(handle405Errors);
 

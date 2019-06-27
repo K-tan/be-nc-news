@@ -68,6 +68,17 @@ describe("/", () => {
             expect(msg).to.equal("page not found");
           });
       });
+      it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
+        const invalidMethods = ["post", "patch", "put", "delete"];
+        const methodPromises = invalidMethods.map(method => {
+          return request[method]("/api/articles/1")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).to.equal("method not allowed");
+            });
+        });
+        return Promise.all(methodPromises);
+      });
     });
   });
   describe("/articles", () => {
@@ -87,6 +98,14 @@ describe("/", () => {
               "topic",
               "comment_count"
             );
+          });
+      });
+      it("GET status 404 when invalid article_id has been provided", () => {
+        return request
+          .get("/api/articles/10000")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("page not found");
           });
       });
     });

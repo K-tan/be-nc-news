@@ -11,7 +11,7 @@ exports.sendUsers = (req, res, next) => {
 exports.sendUserById = (req, res, next) => {
   fetchUserById(req.params)
     .then(([user]) => {
-      if (!user) return Promise.reject({ msg: "page not found", code: 404 });
+      if (!user) return Promise.reject({ msg: "page not found", status: 404 });
       res.status(200).send({ user });
     })
     .catch(next);
