@@ -10,17 +10,9 @@ exports.fetchArticleById = ({ article_id }) => {
     .groupBy("articles.article_id");
 };
 
-exports.updateArticle = (article_id, data) => {
+exports.updateArticle = (article_id, { inc_votes }) => {
   return knex("articles")
     .where("article_id", "=", article_id)
-    .update(data)
-    .returning("*")
-    .then(rows => {
-      if (rows.length) return rows;
-      else
-        return Promise.reject({
-          status: 422,
-          msg: "Bad Request: Unprocessable Data"
-        });
-    });
+    .increment("votes", inc_votes)
+    .returning("*");
 };

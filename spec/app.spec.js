@@ -68,17 +68,17 @@ describe("/", () => {
             expect(msg).to.equal("page not found");
           });
       });
-      it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
-        const invalidMethods = ["post", "patch", "put", "delete"];
-        const methodPromises = invalidMethods.map(method => {
-          return request[method]("/api/articles/1")
-            .expect(405)
-            .then(({ body: { msg } }) => {
-              expect(msg).to.equal("method not allowed");
-            });
-        });
-        return Promise.all(methodPromises);
-      });
+      // it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
+      //   const invalidMethods = ["post", "patch", "put", "delete"];
+      //   const methodPromises = invalidMethods.map(method => {
+      //     return request[method]("/api/articles/1")
+      //       .expect(405)
+      //       .then(({ body: { msg } }) => {
+      //         expect(msg).to.equal("method not allowed");
+      //       });
+      //   });
+      //   return Promise.all(methodPromises);
+      // });
     });
   });
   describe("/articles", () => {
@@ -118,17 +118,31 @@ describe("/", () => {
         .send(input)
         .expect(200)
         .then(({ body: { article } }) => {
-          expect(article).to.eql({
-            article_id: 1,
-            title: "Living in the shadow of a great man",
-            body: "I find this existence challenging",
-            votes: 101,
-            topic: "mitch",
-            author: "butter_bridge",
-            created_at: "2018-11-15T12:21:54.171Z",
-            comment_count: "13"
-          });
+          expect(article.votes).to.equal(101);
         });
     });
+    it("decreases the vote count by the inc_votes passed through and returns the updated article ", () => {
+      const input = { inc_votes: -1 };
+      return request
+        .patch("/api/articles/1")
+        .send(input)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article.votes).to.equal(99);
+        });
+    });
+    // it("patch 400 error Bad Request if invalid key is given", () => {
+    //   const input = {
+    //     incvotes: 1
+    //   };
+    //   return request
+    //     .patch("/api/articles/1")
+    //     .send(input)
+    //     .expect(400)
+    //     .then(({ body: { msg } }) => {
+    //       expect(msg).to.equal("Bad Request Invalid Data");
+    //     });
+    // });
   });
+  describe("POST", () => {});
 });
