@@ -1,4 +1,8 @@
-const { fetchArticleById, updateArticle } = require("../models/articles-model");
+const {
+  fetchArticleById,
+  updateArticle,
+  addComment
+} = require("../models/articles-model");
 
 exports.sendArticleById = (req, res, next) => {
   fetchArticleById(req.params)
@@ -19,4 +23,13 @@ exports.patchArticle = (req, res, next) => {
     .catch(next);
 };
 
+exports.postComments = (req, res, next) => {
+  const article_id = req.params;
+  const body = req.body;
+  addComment(article_id, body)
+    .then(([comment]) => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
 // if (!article) return Promise.reject({ msg: "page not found", status: 404 });

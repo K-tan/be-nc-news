@@ -51,63 +51,60 @@ describe("/", () => {
     it("GET response with 200 all users", () => {
       return request.get("/api/users").expect(200);
     });
-    describe("/:username", () => {
-      it("GET status 200 returns user obj of passed id", () => {
-        return request
-          .get("/api/users/butter_bridge")
-          .expect(200)
-          .then(({ body: { user } }) => {
-            expect(user).to.contain.keys("username", "avatar_url", "name");
-          });
-      });
-      it("GET status 404 when invalid username has been provided", () => {
-        return request
-          .get("/api/users/notvalid")
-          .expect(404)
-          .then(({ body: { msg } }) => {
-            expect(msg).to.equal("page not found");
-          });
-      });
-      // it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
-      //   const invalidMethods = ["post", "patch", "put", "delete"];
-      //   const methodPromises = invalidMethods.map(method => {
-      //     return request[method]("/api/articles/1")
-      //       .expect(405)
-      //       .then(({ body: { msg } }) => {
-      //         expect(msg).to.equal("method not allowed");
-      //       });
-      //   });
-      //   return Promise.all(methodPromises);
-      // });
+
+    it("GET status 200 returns user obj of passed id", () => {
+      return request
+        .get("/api/users/butter_bridge")
+        .expect(200)
+        .then(({ body: { user } }) => {
+          expect(user).to.contain.keys("username", "avatar_url", "name");
+        });
     });
+    it("GET status 404 when invalid username has been provided", () => {
+      return request
+        .get("/api/users/notvalid")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("page not found");
+        });
+    });
+    // it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
+    //   const invalidMethods = ["post", "patch", "put", "delete"];
+    //   const methodPromises = invalidMethods.map(method => {
+    //     return request[method]("/api/articles/1")
+    //       .expect(405)
+    //       .then(({ body: { msg } }) => {
+    //         expect(msg).to.equal("method not allowed");
+    //       });
+    //   });
+    //   return Promise.all(methodPromises);
+    // });
   });
   describe("/articles", () => {
-    describe("/:article_id", () => {
-      it("GET status 200 returns article obj of passed id", () => {
-        return request
-          .get("/api/articles/1")
-          .expect(200)
-          .then(({ body: { article } }) => {
-            expect(article).to.contain.keys(
-              "author",
-              "title",
-              "article_id",
-              "body",
-              "votes",
-              "created_at",
-              "topic",
-              "comment_count"
-            );
-          });
-      });
-      it("GET status 404 when invalid article_id has been provided", () => {
-        return request
-          .get("/api/articles/notvalid")
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.msg).to.equal("Page not found");
-          });
-      });
+    it("GET status 200 returns article obj of passed id", () => {
+      return request
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).to.contain.keys(
+            "author",
+            "title",
+            "article_id",
+            "body",
+            "votes",
+            "created_at",
+            "topic",
+            "comment_count"
+          );
+        });
+    });
+    it("GET status 404 when invalid article_id has been provided", () => {
+      return request
+        .get("/api/articles/notvalid")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).to.equal("Page not found");
+        });
     });
   });
   describe("PATCH", () => {
@@ -131,9 +128,9 @@ describe("/", () => {
           expect(article.votes).to.equal(99);
         });
     });
-    // it("patch 400 error Bad Request if invalid key is given", () => {
+    // it("patch 400 error Bad Request if invalid key is provided", () => {
     //   const input = {
-    //     incvotes: 1
+    //     in_votes: 1
     //   };
     //   return request
     //     .patch("/api/articles/1")
@@ -143,6 +140,49 @@ describe("/", () => {
     //       expect(msg).to.equal("Bad Request Invalid Data");
     //     });
     // });
+    //CREATE TESTS TO BREAK THE ABOVE FOR ERROR HANDLINGS
   });
-  describe("POST", () => {});
+  describe("POST", () => {
+    it("posts a comment with properties username and body, responds with the posted comment ", () => {
+      const input = {
+        username: "butter_bridge",
+        body: "This is a test comment"
+      };
+      return request
+        .post("/api/articles/1/comments")
+        .send(input)
+        .expect(201)
+        .then(({ body: { comment } }) => {
+          expect(comment.author).to.eql("butter_bridge");
+          expect(comment.body).to.eql("This is a test comment");
+        });
+    });
+    it("recieve error bad request invalid data when we post invalid comment", () => {
+      const input = {};
+      return request
+        .post("/api/articles/1/comments")
+        .send(input)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal("Bad Request Invalid Data");
+        });
+    });
+    it("recieve error bad request when we post valid comment with invalid values", () => {
+      const input = {
+        username: 1,
+        body: 1
+      };
+      return request
+        .post("/api/articles/1/comments")
+        .send(input)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal("Bad Request Invalid Data");
+        });
+    });
+    //CREATE TESTS TO BREAK THE ABOVE FOR ERROR HANDLING
+  });
+  describe("GET comments for given article_id", () => {
+    it("returns an array of commentd for given article_id, with correct properties", () => {});
+  });
 });

@@ -12,8 +12,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
   else next(err);
 };
 exports.handleCodeErrors = (err, req, res, next) => {
-  const psqlCodes = [];
-  //   console.log(err);
+  const psqlCodes = ["23502", "23503"];
   if (psqlCodes.includes(err.code)) {
     res.status(400).send({ msg: "Bad Request Invalid Data" });
   } else {
