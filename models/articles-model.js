@@ -1,5 +1,9 @@
 const knex = require("../connection");
 
+exports.fetchArticles = () => {
+  return knex.select("*").from("articles");
+};
+
 exports.fetchArticleById = ({ article_id }) => {
   return knex
     .select("articles.*")
@@ -11,6 +15,11 @@ exports.fetchArticleById = ({ article_id }) => {
 };
 
 exports.updateArticle = (article_id, { inc_votes }) => {
+  // if (inc_votes === undefined)
+  //   return Promise.reject({
+  //     msg: "page not found",
+  //     status: 404
+  //   });
   return knex("articles")
     .where("article_id", "=", article_id)
     .increment("votes", inc_votes)
@@ -18,7 +27,6 @@ exports.updateArticle = (article_id, { inc_votes }) => {
 };
 
 exports.addComment = ({ article_id }, comment) => {
-  //passing but not 100% sure this is correct due to me manually adding article_id
   const input = {
     author: comment.username,
     article_id: article_id,
@@ -30,11 +38,9 @@ exports.addComment = ({ article_id }, comment) => {
     .returning("*");
 };
 
-// {
-//   body:
-//     'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
-//   belongs_to: 'Living in the shadow of a great man',
-//   created_by: 'butter_bridge',
-//   votes: 14,
-//   created_at: 1479818163389,
-// },
+exports.fetchCommentsByArticleId = ({ article_id }, sort_by, order) => {
+  return knex("comments")
+    .where("comments.article_id", article_id)
+    .select("comment_id", "votes", "created_at", "author", "body")
+    .orderBy(sort_by || "created_at", order || "desc");
+};
