@@ -1,7 +1,13 @@
 const knex = require("../connection");
 
-exports.fetchArticles = () => {
-  return knex.select("*").from("articles");
+exports.fetchArticles = ({ article_id }, sort_by, order) => {
+  return knex
+    .select("articles.*")
+    .count({ comment_count: "articles.article_id" })
+    .from("articles")
+    .rightJoin("comments", "comments.article_id", "articles.article_id")
+    .groupBy("articles.article_id")
+    .orderBy(sort_by || "created_at", order || "desc");
 };
 
 exports.fetchArticleById = ({ article_id }) => {

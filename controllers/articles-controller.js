@@ -6,10 +6,13 @@ const {
   fetchArticles
 } = require("../models/articles-model");
 
+//change the comment_count to an integer?
 exports.sendArticles = (req, res, next) => {
-  fetchArticles()
+  const { sort_by } = req.query;
+  const { order } = req.query;
+  const body = req.body;
+  fetchArticles(body, sort_by, order)
     .then(articles => {
-      console.log(articles);
       res.status(200).send({ articles });
     })
     .catch(next);

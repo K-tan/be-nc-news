@@ -80,7 +80,7 @@ describe("/", () => {
     //   return Promise.all(methodPromises);
     // });
   });
-  describe("/articles", () => {
+  describe("/articles/:article_id", () => {
     it("GET status 200 returns article obj of passed id", () => {
       return request
         .get("/api/articles/1")
@@ -256,6 +256,29 @@ describe("/", () => {
             "topic",
             "comment_count"
           );
+        });
+    });
+  });
+  describe.only("/api/articles", () => {
+    it("GET sorts by is defaulted by created_at", () => {
+      return request
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).to.be.sortedBy("created_at", {
+            descending: true
+          });
+        });
+    });
+    it("GET sorts by title and ascending order", () => {
+      return request
+        .get("/api/articles?sort_by=title&&order=asc")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          console.log(articles);
+          expect(articles).to.be.sortedBy("title", {
+            descending: false
+          });
         });
     });
   });

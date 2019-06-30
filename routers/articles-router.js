@@ -10,6 +10,7 @@ const {
 const { handle405Errors } = require("../errors");
 
 articlesRouter.route("/").get(sendArticles);
+
 articlesRouter
   .route("/:article_id")
   .get(sendArticleById)
