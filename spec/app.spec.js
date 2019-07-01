@@ -259,7 +259,7 @@ describe("/", () => {
         });
     });
   });
-  describe.only("/api/articles", () => {
+  describe("Querys, /api/articles", () => {
     it("GET sorts by is defaulted by created_at", () => {
       return request
         .get("/api/articles")
@@ -275,10 +275,23 @@ describe("/", () => {
         .get("/api/articles?sort_by=title&&order=asc")
         .expect(200)
         .then(({ body: { articles } }) => {
-          console.log(articles);
           expect(articles).to.be.sortedBy("title", {
             descending: false
           });
+        });
+    });
+    xit("author, which filters the articles by the username value specified in the query", () => {});
+    xit("topic, which filters the articles by the topic value specified in the query", () => {});
+  });
+  describe("PATCH, /api/comments/:comment_id", () => {
+    it("increases the vote count by the inc_votes passed through and returns the updated comment", () => {
+      const input = { inc_votes: 1 };
+      return request
+        .patch("/api/comments/1")
+        .send(input)
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article.votes).to.equal(17);
         });
     });
   });
