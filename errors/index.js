@@ -1,4 +1,5 @@
 //place error handlers in here
+
 exports.handle404Errors = (req, res, next) => {
   res.status(404).send({ msg: "page not found" });
 };
@@ -12,7 +13,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
   else next(err);
 };
 exports.handleCodeErrors = (err, req, res, next) => {
-  const psqlCodes = ["23502", "23503"];
+  const psqlCodes = ["23502", "23503", "42703"];
   if (psqlCodes.includes(err.code)) {
     res.status(400).send({ msg: "Bad Request Invalid Data" });
   } else {

@@ -298,6 +298,9 @@ describe("/", () => {
           expect(articles[1].topic).to.eql("mitch");
         });
     });
+    it("GET returns 400 for an invalid sort_by query", () => {
+      return request.get("/api/articles?sort_by=address").expect(400);
+    });
   });
   describe("PATCH, /api/comments/:comment_id", () => {
     it("increases the vote count by the inc_votes passed through and returns the updated comment", () => {
@@ -310,17 +313,39 @@ describe("/", () => {
           expect(comment.votes).to.equal(17);
         });
     });
+    it("decreases the vote count by the inc_votes passed through and returns the updated comment", () => {
+      const input = { inc_votes: -1 };
+      return request
+        .patch("/api/comments/1")
+        .send(input)
+        .expect(200)
+        .then(({ body: { comment } }) => {
+          expect(comment.votes).to.equal(15);
+        });
+    });
+    xit("patch 400 error Bad Request if invalid value is given", () => {
+      const input = {
+        inc_votes: "five"
+      };
+      return request
+        .patch("/api/comments/1")
+        .send(input)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Bad Request Invalid Data");
+        });
+    });
   });
   describe("DELETE, /api/comments/:comment_id", () => {
     it("delete the given comment by comment_id, status 204 and no content", () => {
       return request.delete("/api/comments/1").expect(204);
     });
-    it("DELETE a comment that doesn't exist", () => {
+    xit("DELETE 400 a comment that doesn't exist", () => {
       return request
         .delete("/api/comments/invalidData")
         .expect(400)
         .then(({ body: { msg } }) => {
-          expect(msg).to.equal("Bad Request: Unprocessable Data");
+          expect(msg).to.equal("Bad Request Invalid Data");
         });
     });
   });
