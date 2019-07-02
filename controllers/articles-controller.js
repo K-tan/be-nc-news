@@ -8,10 +8,9 @@ const {
 
 //change the comment_count to an integer?
 exports.sendArticles = (req, res, next) => {
-  const { sort_by } = req.query;
-  const { order } = req.query;
+  const { sort_by, order, author, topic } = req.query;
   const body = req.body;
-  fetchArticles(body, sort_by, order)
+  fetchArticles(body, sort_by, order, author, topic)
     .then(articles => {
       res.status(200).send({ articles });
     })

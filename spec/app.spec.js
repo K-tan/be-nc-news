@@ -290,9 +290,14 @@ describe("/", () => {
         .patch("/api/comments/1")
         .send(input)
         .expect(200)
-        .then(({ body: { article } }) => {
-          expect(article.votes).to.equal(17);
+        .then(({ body: { comment } }) => {
+          expect(comment.votes).to.equal(17);
         });
+    });
+  });
+  describe("DELETE, /api/comments/:comment_id", () => {
+    it("delete the given comment by comment_id, status 204 and no content", () => {
+      return request.delete("/api/comments/1").expect(204);
     });
   });
 });
