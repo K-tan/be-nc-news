@@ -280,8 +280,24 @@ describe("/", () => {
           });
         });
     });
-    xit("author, which filters the articles by the username value specified in the query", () => {});
-    xit("topic, which filters the articles by the topic value specified in the query", () => {});
+    it("status : 200, author, which filters the articles by the username value specified in the query", () => {
+      return request
+        .get("/api/articles?author=butter_bridge")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles[0].author).to.eql("butter_bridge");
+          expect(articles[1].author).to.eql("butter_bridge");
+        });
+    });
+    it("status: 200, topic, which filters the articles by the topic value specified in the query", () => {
+      return request
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles[0].topic).to.eql("mitch");
+          expect(articles[1].topic).to.eql("mitch");
+        });
+    });
   });
   describe("PATCH, /api/comments/:comment_id", () => {
     it("increases the vote count by the inc_votes passed through and returns the updated comment", () => {
@@ -298,6 +314,14 @@ describe("/", () => {
   describe("DELETE, /api/comments/:comment_id", () => {
     it("delete the given comment by comment_id, status 204 and no content", () => {
       return request.delete("/api/comments/1").expect(204);
+    });
+    it("DELETE a comment that doesn't exist", () => {
+      return request
+        .delete("/api/comments/invalidData")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).to.equal("Bad Request: Unprocessable Data");
+        });
     });
   });
 });
