@@ -5,7 +5,7 @@ exports.fetchArticles = ({ article_id }, sort_by, order, author, topic) => {
     .select("articles.*")
     .count({ comment_count: "articles.article_id" })
     .from("articles")
-    .rightJoin("comments", "comments.article_id", "articles.article_id")
+    .leftJoin("comments", "comments.article_id", "articles.article_id")
     .groupBy("articles.article_id")
     .orderBy(sort_by || "created_at", order || "desc")
     .modify(query => {

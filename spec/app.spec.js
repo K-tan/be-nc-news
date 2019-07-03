@@ -332,12 +332,12 @@ describe("/", () => {
     it("delete the given comment by comment_id, status 204 and no content", () => {
       return request.delete("/api/comments/1").expect(204);
     });
-    xit("*ERROR* DELETE 400 a comment that doesn't exist", () => {
+    it("*ERROR* DELETE 400 a comment that doesn't exist", () => {
       return request
         .delete("/api/comments/invalidData")
-        .expect(400)
+        .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).to.equal("Bad Request Invalid Data");
+          expect(msg).to.equal("Page not found");
         });
     });
   });
