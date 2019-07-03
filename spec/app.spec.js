@@ -26,7 +26,7 @@ describe("/", () => {
             expect(topics).to.be.an("array");
           });
       });
-      it("GET status 404 when trying to access a wrong endpoint", () => {
+      it("*ERROR* status 404 when trying to access a wrong endpoint", () => {
         return request
           .get("/api/topics/notvalid")
           .expect(404)
@@ -60,7 +60,7 @@ describe("/", () => {
           expect(user).to.contain.keys("username", "avatar_url", "name");
         });
     });
-    it("GET status 404 when invalid username has been provided", () => {
+    it("*ERROR* GET status 404 when invalid username has been provided", () => {
       return request
         .get("/api/users/notvalid")
         .expect(404)
@@ -68,17 +68,6 @@ describe("/", () => {
           expect(msg).to.equal("page not found");
         });
     });
-    // it("POST status 405 when trying to POST, PUT, DELETE to article_id endpoint", () => {
-    //   const invalidMethods = ["post", "patch", "put", "delete"];
-    //   const methodPromises = invalidMethods.map(method => {
-    //     return request[method]("/api/articles/1")
-    //       .expect(405)
-    //       .then(({ body: { msg } }) => {
-    //         expect(msg).to.equal("method not allowed");
-    //       });
-    //   });
-    //   return Promise.all(methodPromises);
-    // });
   });
   describe("/articles/:article_id", () => {
     it("GET status 200 returns article obj of passed id", () => {
@@ -98,7 +87,7 @@ describe("/", () => {
           );
         });
     });
-    it("GET status 404 when invalid article_id has been provided", () => {
+    it("*ERROR* GET status 404 when invalid article_id has been provided", () => {
       return request
         .get("/api/articles/notvalid")
         .expect(404)
@@ -128,7 +117,7 @@ describe("/", () => {
           expect(article.votes).to.equal(99);
         });
     });
-    xit("patch 400 error Bad Request if invalid key is provided", () => {
+    it("*ERROR* PATCH 400 error Bad Request Invalid Data if invalid key is provided", () => {
       const input = {
         in_votes: 1
       };
@@ -157,7 +146,7 @@ describe("/", () => {
           expect(comment.body).to.eql("This is a test comment");
         });
     });
-    it("recieve error bad request invalid data when we post invalid comment", () => {
+    it("*ERROR* POST 400 recieve error Bad Request Invalid Data invalid data when we post invalid comment", () => {
       const input = {};
       return request
         .post("/api/articles/1/comments")
@@ -167,7 +156,7 @@ describe("/", () => {
           expect(body.msg).to.equal("Bad Request Invalid Data");
         });
     });
-    it("recieve error bad request when we post valid comment with invalid values", () => {
+    it("*ERROR* POST 400 recieve error Bad Request Invalid Data when we post valid comment with invalid values", () => {
       const input = {
         username: 1,
         body: 1
@@ -231,6 +220,9 @@ describe("/", () => {
             descending: false
           });
         });
+    });
+    it("GET returns 400 for an invalid sort_by query", () => {
+      return request.get("/api/articles?sort_by=invalid").expect(400);
     });
   });
   describe("/api/articles", () => {
@@ -298,7 +290,7 @@ describe("/", () => {
           expect(articles[1].topic).to.eql("mitch");
         });
     });
-    it("GET returns 400 for an invalid sort_by query", () => {
+    it("*ERROR* 400 for an invalid sort_by query", () => {
       return request.get("/api/articles?sort_by=address").expect(400);
     });
   });
@@ -323,9 +315,9 @@ describe("/", () => {
           expect(comment.votes).to.equal(15);
         });
     });
-    xit("patch 400 error Bad Request if invalid value is given", () => {
+    it("*ERROR* PATCH 400 Error Bad Request Invalid Data, if invalid key is provided to update vote", () => {
       const input = {
-        inc_votes: "five"
+        in_votes: 1
       };
       return request
         .patch("/api/comments/1")
@@ -340,7 +332,7 @@ describe("/", () => {
     it("delete the given comment by comment_id, status 204 and no content", () => {
       return request.delete("/api/comments/1").expect(204);
     });
-    xit("DELETE 400 a comment that doesn't exist", () => {
+    xit("*ERROR* DELETE 400 a comment that doesn't exist", () => {
       return request
         .delete("/api/comments/invalidData")
         .expect(400)

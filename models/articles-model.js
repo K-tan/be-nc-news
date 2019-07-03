@@ -25,11 +25,11 @@ exports.fetchArticleById = ({ article_id }) => {
 };
 
 exports.updateArticle = (article_id, { inc_votes }) => {
-  // if (inc_votes === undefined)
-  //   return Promise.reject({
-  //     msg: "page not found",
-  //     status: 404
-  //   });
+  if (inc_votes === undefined)
+    return Promise.reject({
+      msg: "Bad Request Invalid Data",
+      status: 400
+    });
   return knex("articles")
     .where("article_id", "=", article_id)
     .increment("votes", inc_votes)
