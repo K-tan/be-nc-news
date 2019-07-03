@@ -15,10 +15,10 @@ describe("/", () => {
   });
   describe("/topics", () => {
     describe("default-behaviour", () => {
-      it("GET response with 200", () => {
+      it("GET status 200", () => {
         return request.get("/api/topics").expect(200);
       });
-      it("GET response with an array of topics", () => {
+      it("GET status 200 response with an array of topics", () => {
         return request
           .get("/api/topics")
           .expect(200)
@@ -115,6 +115,15 @@ describe("/", () => {
         .expect(200)
         .then(({ body: { article } }) => {
           expect(article.votes).to.equal(99);
+        });
+    });
+    it("ignore a `patch` request with no information in the request body, and send the unchanged article to the client provide a default argument of 0 to the increment method, otherwise it will automatically increment by 1 ", () => {
+      return request
+        .patch("/api/articles/1")
+        .send({ inc_votes: 0 })
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article.votes).to.equal(100);
         });
     });
     it("*ERROR* PATCH 400 error Bad Request Invalid Data if invalid key is provided", () => {
