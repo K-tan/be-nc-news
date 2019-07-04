@@ -54,14 +54,3 @@ exports.fetchCommentsByArticleId = ({ article_id }, sort_by, order) => {
     .select("comment_id", "votes", "created_at", "author", "body")
     .orderBy(sort_by || "created_at", order || "desc");
 };
-
-// Promise.all([
-//   fetchCommentsByArticleId({ article_id }, sort_by, order),
-//   fetchArticleById(req.params)
-// ])
-//   .then(([comments, [article]]) => {
-//     if (!article)
-//       return Promise.reject({ status: 404, msg: "articles not found" });
-//     else res.status(200).send({ comments });
-//   })
-//   .catch(next);

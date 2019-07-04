@@ -5,6 +5,7 @@ const chai = require("chai");
 const { expect } = chai;
 const knex = require("../connection");
 chai.use(require("chai-sorted"));
+const endpoints = require("../endpoints.json");
 
 describe("/", () => {
   beforeEach(() => {
@@ -12,6 +13,16 @@ describe("/", () => {
   });
   after(() => {
     knex.destroy();
+  });
+  describe("/, GET all endpoints", () => {
+    it("JSON describing all the available endpoints on the API", () => {
+      return request
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).to.eql(endpoints);
+        });
+    });
   });
   describe("/topics", () => {
     describe("default-behaviour", () => {
