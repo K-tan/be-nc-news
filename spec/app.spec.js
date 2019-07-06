@@ -23,6 +23,9 @@ describe("/", () => {
           expect(body).to.eql(endpoints);
         });
     });
+    it("Status 405 - delete `/api`", () => {
+      return request.delete("/api").expect(405);
+    });
   });
   describe("/topics", () => {
     describe("default-behaviour", () => {
@@ -102,9 +105,9 @@ describe("/", () => {
     it("*ERROR* GET status 404 when invalid article_id has been provided", () => {
       return request
         .get("/api/articles/notvalid")
-        .expect(404)
+        .expect(400)
         .then(({ body }) => {
-          expect(body.msg).to.equal("Page not found");
+          expect(body.msg).to.equal("Bad Request Invalid Data");
         });
     });
   });
@@ -150,7 +153,6 @@ describe("/", () => {
           expect(msg).to.equal("Bad Request Invalid Data");
         });
     });
-    //CREATE TESTS TO BREAK THE ABOVE FOR ERROR HANDLINGS
   });
   describe("POST", () => {
     it("posts a comment with properties username and body, responds with the posted comment ", () => {
@@ -184,6 +186,26 @@ describe("/", () => {
       };
       return request
         .post("/api/articles/1/comments")
+        .send(input)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal("Bad Request Invalid Data");
+        });
+    });
+    it("*ERROR* POST 400 recieve error Bad Request Invalid Data when we trying to add add to a comment with valid article_id that is not there", () => {
+      const input = {};
+      return request
+        .post("/api/articles/10000/comments")
+        .send(input)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal("Bad Request Invalid Data");
+        });
+    });
+    it("*ERROR* POST 400 recieve error Bad Request Invalid Data when trying to add to a comment with a bad article_id", () => {
+      const input = {};
+      return request
+        .post("/api/articles/not-valid-path/comments")
         .send(input)
         .expect(400)
         .then(({ body }) => {
@@ -356,9 +378,9 @@ describe("/", () => {
     it("*ERROR* DELETE 400 a comment that doesn't exist", () => {
       return request
         .delete("/api/comments/invalidData")
-        .expect(404)
+        .expect(400)
         .then(({ body: { msg } }) => {
-          expect(msg).to.equal("Page not found");
+          expect(msg).to.equal("Bad Request Invalid Data");
         });
     });
   });

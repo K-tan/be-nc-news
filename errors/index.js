@@ -13,7 +13,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
   else next(err);
 };
 exports.handleCodeErrors = (err, req, res, next) => {
-  const psqlCodes = ["23502", "23503", "42703"];
+  const psqlCodes = ["23502", "23503", "42703", "22P02"];
   if (psqlCodes.includes(err.code)) {
     res.status(400).send({ msg: "Bad Request Invalid Data" });
   } else {
@@ -22,7 +22,7 @@ exports.handleCodeErrors = (err, req, res, next) => {
 };
 
 exports.handle404PSQLerrors = (err, req, res, next) => {
-  const psqlCodes = ["22P02"];
+  const psqlCodes = [];
   //   console.log(err);
   if (psqlCodes.includes(err.code)) {
     res.status(404).send({ msg: "Page not found" });
