@@ -55,22 +55,73 @@
         "comment_count": "13"
       }
     ]
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "serves a article object",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+        "votes": 0,
+        "topic": "coding",
+        "author": "jessjelly",
+        "created_at": "2016-08-18T12:07:52.389Z",
+        "comment_count": "8"
+      }
+    ]
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts comments to an article id",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "comment_id": 44,
+        "votes": 4,
+        "created_at": "2017-11-20T08:58:48.322Z",
+        "author": "grumpy19",
+        "body": "Error est qui id corrupti et quod enim accusantium minus. Deleniti quae ea magni officiis et qui suscipit non."
+      }
+    ]
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves comments from an article id",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "comment_id": 44,
+        "votes": 4,
+        "created_at": "2017-11-20T08:58:48.322Z",
+        "author": "grumpy19",
+        "body": "Error est qui id corrupti et quod enim accusantium minus. Deleniti quae ea magni officiis et qui suscipit non."
+      },
+      {
+        "comment_id": 134,
+        "votes": 7,
+        "created_at": "2017-08-21T01:05:57.848Z",
+        "author": "jessjelly",
+        "body": "Nam qui vel neque aut. Quas quos nisi. Eum praesentium quasi commodi saepe assumenda sed vel. Nostrum qui magnam aut occaecati exercitationem aut voluptatibus."
+      }
+    ]
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "increase vote for comment",
+    "queries": [],
+    "exampleResponse": [
+      {
+        "comment_id": 1,
+        "author": "butter_bridge",
+        "article_id": 9,
+        "votes": 17,
+        "created_at": "2017-11-22T12: 36: 03.389Z",
+        "body": "Oh, I've got compassion running out of my "
+      }
+    ]
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "delete comments by comment_id",
+    "queries": [],
+    "exampleResponse": [{}]
   }
-  // Responds with
-  // an article object, which should have the following properties:
-  // author which is the username from the users table
-  // title
-  // article_id
-  // body
-  // topic
-  // created_at
-  // votes
-  // comment_count which is the total count of all the comments with this article_id - you should make use of knex queries in order to achieve this
-  // PATCH /api/articles/:article_id
-  // POST /api/articles/:article_id/comments
-  // GET /api/articles/:article_id/comments
-  // GET /api/articles - done
-  // PATCH /api/comments/:comment_id
-  // DELETE /api/comments/:comment_id
-  // GET /api -
 }

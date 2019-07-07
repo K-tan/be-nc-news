@@ -23,7 +23,6 @@ exports.handleCodeErrors = (err, req, res, next) => {
 
 exports.handle404PSQLerrors = (err, req, res, next) => {
   const psqlCodes = [];
-  //   console.log(err);
   if (psqlCodes.includes(err.code)) {
     res.status(404).send({ msg: "Page not found" });
   } else {

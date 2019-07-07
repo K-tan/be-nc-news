@@ -71,7 +71,6 @@ describe("/", () => {
         .get("/api/users/butter_bridge")
         .expect(200)
         .then(({ body: { user } }) => {
-          console.log(user);
           expect(user).to.contain.keys("username", "avatar_url", "name");
         });
     });
@@ -222,6 +221,17 @@ describe("/", () => {
           expect(comments).to.be.an("array");
         });
     });
+    it("status 405 POST, PUT", () => {
+      const invalidMethods = ["post", "put"];
+      const methodPromises = invalidMethods.map(method => {
+        return request[method]("/api/comments/1")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
   });
   describe("Querys", () => {
     it("GET sorts by is defaulted by valid column", () => {
@@ -293,6 +303,17 @@ describe("/", () => {
           );
         });
     });
+    it("status 405 PUT, DELETE", () => {
+      const invalidMethods = ["put", "delete"];
+      const methodPromises = invalidMethods.map(method => {
+        return request[method]("/api/articles")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).to.equal("method not allowed");
+          });
+      });
+      return Promise.all(methodPromises);
+    });
   });
   describe("Querys, /api/articles", () => {
     it("GET sorts by is defaulted by created_at", () => {
@@ -336,6 +357,15 @@ describe("/", () => {
     it("*ERROR* 400 for an invalid sort_by query", () => {
       return request.get("/api/articles?sort_by=address").expect(400);
     });
+    xit("*ERROR* 400 for an invalid topic query", () => {
+      return request
+        .get("/api/articles?topic=InvalidTopic")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          console.log(body);
+          expect(msg).to.eql('"Bad Request');
+        });
+    });
   });
   describe("PATCH, /api/comments/:comment_id", () => {
     it("increases the vote count by the inc_votes passed through and returns the updated comment", () => {
@@ -345,6 +375,7 @@ describe("/", () => {
         .send(input)
         .expect(200)
         .then(({ body: { comment } }) => {
+          console.log(comment);
           expect(comment.votes).to.equal(17);
         });
     });

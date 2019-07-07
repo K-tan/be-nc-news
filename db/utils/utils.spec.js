@@ -123,4 +123,27 @@ describe("formatComments", () => {
     expect(actual[0].author).to.eql("grumpy19");
     expect(actual[0].article_id).to.eql(4);
   });
+  it("does not mutate the input", () => {
+    const comment = [
+      {
+        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
+        belongs_to: "Making sense of Redux",
+        created_by: "grumpy19",
+        votes: 7,
+        created_at: 1478813209256
+      }
+    ];
+    const expected = [
+      {
+        body: "Nobis consequatur animi. Ullam nobis quaerat voluptates veniam.",
+        belongs_to: "Making sense of Redux",
+        created_by: "grumpy19",
+        votes: 7,
+        created_at: 1478813209256
+      }
+    ];
+    const articleRef = { "Making sense of Redux": 4 };
+    formatComments(comment, articleRef);
+    expect(comment).to.eql(expected);
+  });
 });
