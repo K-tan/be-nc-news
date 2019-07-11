@@ -9,4 +9,10 @@ exports.fetchUserById = ({ username }) => {
     .select("*")
     .from("users")
     .where("username", username);
+  // .then(([username]) => {
+  // if (!username) {
+  //   return Promise.reject({ status: 404, msg: "page not found" });
+  // }
+  // return user;
+  // });
 };

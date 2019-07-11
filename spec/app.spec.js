@@ -362,7 +362,6 @@ describe("/", () => {
         .get("/api/articles?topic=InvalidTopic")
         .expect(400)
         .then(({ body: { msg } }) => {
-          console.log(body);
           expect(msg).to.eql('"Bad Request');
         });
     });
@@ -375,7 +374,6 @@ describe("/", () => {
         .send(input)
         .expect(200)
         .then(({ body: { comment } }) => {
-          console.log(comment);
           expect(comment.votes).to.equal(17);
         });
     });
